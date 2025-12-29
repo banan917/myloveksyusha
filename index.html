@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Для тебя 💖</title>
+
+<style>
+body {
+  margin: 0;
+  height: 100vh;
+  background: radial-gradient(circle, #ff9a9e, #fad0c4);
+  font-family: 'Segoe UI', sans-serif;
+  overflow: hidden;
+  color: white;
+}
+
+.scene {
+  display: none;
+  height: 100vh;
+  padding: 40px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.scene.active {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+h1 {
+  font-size: 42px;
+  margin-bottom: 20px;
+  animation: glow 2s infinite alternate;
+}
+
+p {
+  font-size: 24px;
+  max-width: 800px;
+  line-height: 1.6;
+  white-space: pre-line;
+}
+
+button {
+  margin-top: 40px;
+  padding: 15px 35px;
+  font-size: 18px;
+  border-radius: 30px;
+  border: none;
+  background: rgba(255,255,255,0.2);
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  transform: scale(1.1);
+  background: rgba(255,255,255,0.4);
+}
+
+@keyframes glow {
+  from { text-shadow: 0 0 10px #fff; }
+  to { text-shadow: 0 0 30px #fff; }
+}
+
+/* Hearts */
+.hearts span {
+  position: absolute;
+  bottom: -20px;
+  font-size: 24px;
+  animation: float linear infinite;
+}
+
+@keyframes float {
+  from { transform: translateY(0); opacity: 1; }
+  to { transform: translateY(-100vh); opacity: 0; }
+}
+</style>
+</head>
+
+<body>
+
+<div id="app"></div>
+<div class="hearts"></div>
+
+<script>
+const scenes = [
+{
+title: "Привет, моя радость 💕",
+text: `Я хотел сделать для тебя не просто подарок.
+А маленький мир,
+в котором есть тепло, свет и искренние слова.`
+},
+{
+title: "О тишине ✨",
+text: `Иногда так важно остановиться
+и просто почувствовать момент.
+Ты умеешь делать такие моменты особенными.`
+},
+{
+title: "О вдохновении 💫",
+text: `С тобой даже обычные дни
+становятся наполненными смыслом.
+И это невероятно ценно.`
+},
+{
+title: "Об улыбке 😊",
+text: `Твоя улыбка умеет менять настроение.
+Она настоящая,
+и в этом её магия.`
+},
+{
+title: "О заботе 💖",
+text: `Ты заботишься так,
+что это чувствуется даже без слов.
+Это редкий и красивый дар.`
+},
+{
+title: "О моментах 🌸",
+text: `Каждый момент с тобой —
+это что-то, что хочется сохранить
+где-то глубоко внутри.`
+},
+{
+title: "О тепле 🔥",
+text: `Рядом с тобой всегда немного теплее.
+Даже когда мир за окном
+не самый простой.`
+},
+{
+title: "Об искренности 🤍",
+text: `Ты настоящая.
+Без масок.
+Именно поэтому ты так ценна.`
+},
+{
+title: "О поддержке 🌿",
+text: `Иногда важно просто знать,
+что рядом есть человек,
+который понимает.`
+},
+{
+title: "О радости ✨",
+text: `Ты умеешь радоваться мелочам
+и этим делать мир светлее
+для всех вокруг.`
+},
+{
+title: "О мечтах 🌙",
+text: `Пусть у тебя всегда будут мечты.
+И пусть у тебя всегда будет
+смелость идти к ним.`
+},
+{
+title: "О силе 💎",
+text: `В тебе больше силы,
+чем ты иногда думаешь.
+И она всегда с тобой.`
+},
+{
+title: "О будущем 🌅",
+text: `Впереди много хорошего.
+Я искренне верю,
+что тебя ждёт светлый путь.`
+},
+{
+title: "Почти конец 💫",
+text: `Спасибо тебе
+за твой характер,
+доброту и тепло.`
+},
+{
+title: "Самое главное ❤️",
+text: `Я очень дорожу тобой.
+И хотел, чтобы ты это знала.
+Всегда.`
+}
+];
+
+let current = 0;
+const app = document.getElementById("app");
+
+function renderScene() {
+  app.innerHTML = "";
+
+  const scene = document.createElement("div");
+  scene.className = "scene active";
+
+  const h1 = document.createElement("h1");
+  const p = document.createElement("p");
+  const btn = document.createElement("button");
+
+  scene.appendChild(h1);
+  scene.appendChild(p);
+  scene.appendChild(btn);
+  app.appendChild(scene);
+
+  btn.textContent = current === scenes.length - 1 ? "Конец ❤️" : "Дальше ✨";
+
+  typeText(h1, scenes[current].title, () => {
+    typeText(p, scenes[current].text);
+  });
+
+  btn.onclick = () => {
+    if (current < scenes.length - 1) {
+      current++;
+      renderScene();
+    }
+  };
+}
+
+function typeText(el, text, callback) {
+  el.textContent = "";
+  let i = 0;
+  const interval = setInterval(() => {
+    el.textContent += text[i];
+    i++;
+    if (i >= text.length) {
+      clearInterval(interval);
+      if (callback) callback();
+    }
+  }, 40);
+}
+
+// hearts
+setInterval(() => {
+  const h = document.createElement("span");
+  h.textContent = "💖";
+  h.style.left = Math.random() * 100 + "vw";
+  h.style.animationDuration = 4 + Math.random() * 4 + "s";
+  document.querySelector(".hearts").appendChild(h);
+  setTimeout(() => h.remove(), 8000);
+}, 300);
+
+renderScene();
+</script>
+
+</body>
+</html>
